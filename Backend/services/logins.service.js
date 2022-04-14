@@ -2,8 +2,8 @@ const db = require("../config/db.config");
 
 exports.getUser = (data, callback) => {
     db.query(
-        `SELECT * FROM logins WHERE email = ? AND password = BINARY ?;`,
-        [data.email, data.password],
+        `SELECT * FROM logins WHERE username = ? AND password = BINARY ?;`,
+        [data.username, data.password],
         (error, results, fields) => {
             if (error) {
                 return callback(error);

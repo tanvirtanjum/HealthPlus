@@ -14,31 +14,16 @@ exports.authAdmin = (req, res, next) => {
     next();
 };
 
-exports.authTeacher = (req, res, next) => {
+exports.authPhysician = (req, res, next) => {
     if (req.header("role") != 2) {
             return res.status(401).send({ success: false, data: "Unauthorized Request." });
     }
     next();
 };
 
-exports.authStudent = (req, res, next) => {
-    if (req.header("role") != 3) {
-            return res.status(401).send({ success: false, data: "Unauthorized Request." });
-    }
-    next();
-};
 
-exports.authAdmin_Teacher = (req, res, next) => {
+exports.authAdmin_Physician = (req, res, next) => {
     if (req.header("role") == 1 || req.header("role") == 2) {
-        next();
-    }
-    else{
-        return res.status(401).send({ success: false, data: "Unauthorized Request." });
-    }   
-};
-
-exports.authAdmin_Teacher_Student = (req, res, next) => {
-    if (req.header("role") == 1 || req.header("role") == 2 || req.header("role") == 3) {
         next();
     }
     else{

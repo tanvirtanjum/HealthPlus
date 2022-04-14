@@ -1,36 +1,36 @@
 CREATE TABLE admin_status(
 	id int AUTO_INCREMENT PRIMARY KEY, 
-	status_name varchar(250) UNIQUE
+	status_name varchar(250) NOT NULL UNIQUE
 );
 
 CREATE TABLE illness_status(
 	id int AUTO_INCREMENT PRIMARY KEY, 
-	status_name varchar(250) UNIQUE
+	status_name varchar(250) NOT NULL UNIQUE
 );
 
 
 CREATE TABLE login_status(
 	id int AUTO_INCREMENT PRIMARY KEY, 
-	status_name varchar(250) UNIQUE
+	status_name varchar(250) NOT NULL UNIQUE
 );
 
 CREATE TABLE logins(
 	id int AUTO_INCREMENT PRIMARY KEY, 
-	username varchar(250),
-	password varchar(250), 
-	status_id  int, 
+	username varchar(250) NOT NULL UNIQUE,
+	password varchar(250) NOT NULL, 
+	status_id  int NOT NULL, 
 	FOREIGN KEY (status_id) REFERENCES login_status(id)
 ); 
 
 CREATE TABLE employees(
 	id int AUTO_INCREMENT PRIMARY KEY, 
-	essn int(10) UNIQUE, 
-	name varchar(250), 
-	phone_no varchar(15), 
-	address longtext, 
-	salary double (100,2), 
-	department varchar(250), 
-	login_id int, 
+	essn int(10) NOT NULL UNIQUE, 
+	name varchar(250) NOT NULL, 
+	phone_no varchar(15) NOT NULL, 
+	address longtext NOT NULL, 
+	salary double (100,2) NOT NULL, 
+	department varchar(250) NOT NULL, 
+	login_id int NOT NULL, 
 	admin_status_id int, 
 	FOREIGN KEY (admin_status_id) REFERENCES admin_status(id), 
 	FOREIGN KEY (login_id) REFERENCES logins(id)
@@ -38,47 +38,47 @@ CREATE TABLE employees(
 
 CREATE TABLE insurance(
 	id int AUTO_INCREMENT PRIMARY KEY, 
-	insrurance_id varchar(250), 
-	company_name varchar(250), 
-	insurance_pay double(10,2),
-	copay double(10,2),
+	insrurance_id varchar(250) NOT NULL, 
+	company_name varchar(250) NOT NULL, 
+	insurance_pay double(10,2) NOT NULL,
+	copay double(10,2) NOT NULL,
 	p_s varchar(15)
 );
 
 CREATE TABLE physicians(
 	id int AUTO_INCREMENT PRIMARY KEY, 
-	pssn int(9) UNIQUE, 
-	name varchar(100), 
-	phone_no varchar(15),
-	address longtext, 
-	department varchar(40), 
-	internship varchar(90), 
-	employee_id int, 
-	login_id int, 
+	pssn int(9) NOT NULL UNIQUE, 
+	name varchar(100) NOT NULL, 
+	phone_no varchar(15) NOT NULL,
+	address longtext NOT NULL, 
+	department varchar(40) NOT NULL, 
+	internship varchar(90) NOT NULL, 
+	employee_id int NOT NULL, 
+	login_id int NOT NULL, 
 	FOREIGN KEY (login_id) REFERENCES logins(id), 
 	FOREIGN KEY (employee_id) REFERENCES employees(id)
 );
 
 CREATE TABLE patients(
 	id int AUTO_INCREMENT PRIMARY KEY, 
-	ssn int(9) UNIQUE,
-	name varchar(250), 
-	dob date, 
-	address longtext, 
-	phone_no varchar(15), 
-	physician_id int, 
-	insurance_id int, 
+	ssn int(9) NOT NULL UNIQUE,
+	name varchar(250) NOT NULL, 
+	dob date NOT NULL, 
+	address longtext NOT NULL, 
+	phone_no varchar(15) NOT NULL, 
+	physician_id int NOT NULL, 
+	insurance_id int NOT NULL, 
 	FOREIGN KEY (physician_id) REFERENCES physicians(id), 
 	FOREIGN KEY (insurance_id) REFERENCES insurance(id)
 );
 
 CREATE TABLE appointments(
 	id int AUTO_INCREMENT PRIMARY KEY,
-	patient_id int, 
-	physician_id int, 
-	employee_id int, 
-	date_for  date, 
-	times time, 
+	patient_id int NOT NULL, 
+	physician_id int NOT NULL, 
+	employee_id int NOT NULL, 
+	date_for  date NOT NULL, 
+	times time NOT NULL, 
 	FOREIGN KEY (patient_id) REFERENCES patients(id), 
 	FOREIGN KEY (physician_id) REFERENCES physicians(id), 
 	FOREIGN KEY (employee_id) REFERENCES employees(id)
@@ -87,12 +87,12 @@ CREATE TABLE appointments(
 
 CREATE TABLE medical_records(
 	id int AUTO_INCREMENT PRIMARY KEY, 
-	sex varchar(10), 
-	patient_id int, 
-	disability_status int,
-	diabetes_status int,
-	blood_pressure_status int,
-	allergies_status int, 
+	sex varchar(10) NOT NULL, 
+	patient_id int NOT NULL, 
+	disability_status int NOT NULL,
+	diabetes_status int NOT NULL,
+	blood_pressure_status int NOT NULL,
+	allergies_status int NOT NULL, 
 	FOREIGN KEY (patient_id) REFERENCES patients(id), 
 	FOREIGN KEY (disability_status) REFERENCES illness_status(id), 
 	FOREIGN KEY (diabetes_status) REFERENCES illness_status(id), 
@@ -103,8 +103,8 @@ CREATE TABLE medical_records(
 
 CREATE TABLE medications(
 	id int AUTO_INCREMENT PRIMARY KEY, 
-	code varchar(250),
-	name varchar(250), 
+	code varchar(250) NOT NULL,
+	name varchar(250) NOT NULL, 
 	brand varchar(250), 
 	description longtext, 
 	physician_id int, 
@@ -113,18 +113,34 @@ CREATE TABLE medications(
 
 CREATE TABLE prescriptions(
 	id int AUTO_INCREMENT PRIMARY KEY, 
-	patient_id int, 
-	physician_id int, 
-	examination longtext, 
+	patient_id int NOT NULL, 
+	physician_id int NOT NULL, 
+	examination longtext NOT NULL, 
 	FOREIGN KEY (physician_id) REFERENCES physicians(id), 
 	FOREIGN KEY (patient_id) REFERENCES patients(id)
 );
 
 CREATE TABLE medicines_list(
 	id int AUTO_INCREMENT PRIMARY KEY, 
-	medication_id int, 
-	prescription_id int, 
+	medication_id int NOT NULL, 
+	prescription_id int NOT NULL, 
 	dose varchar(40), 
 	FOREIGN KEY (medication_id) REFERENCES medications(id), 
 	FOREIGN KEY (prescription_id) REFERENCES prescriptions(id)
 );
+
+
+INSERT INTO `login_status` (`id`, `status_name`) 
+VALUES (NULL, 'ADMIN'), (NULL, 'PHYSICIAN'), (NULL, 'NO ACCESS');
+
+INSERT INTO `admin_status` (`id`, `status_name`) 
+VALUES (NULL, 'ADMIN'), (NULL, 'NO ACCESS');
+
+INSERT INTO `illness_status` (`id`, `status_name`) 
+VALUES (NULL, 'YES'), (NULL, 'NO');
+
+INSERT INTO `logins` (`id`, `username`, `password`, `status_id`) 
+VALUES (NULL, 'tanjumtanvir@gmail.com', '12345', '1');
+
+INSERT INTO `employees` (`id`, `essn`, `name`, `phone_no`, `address`, `salary`, `department`, `login_id`, `admin_status_id`) 
+VALUES (NULL, '1011201127', 'TANVIR TANJUM SHOURAV', '+8801515217821', 'Motijheel A.G.B Colony B-6/E-4, Motijheel, Dhaka-1000, Bangladesh', '10000', 'Neuro', '1', '1');
