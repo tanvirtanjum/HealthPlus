@@ -1,0 +1,130 @@
+CREATE TABLE admin_status(
+	id int AUTO_INCREMENT PRIMARY KEY, 
+	status_name varchar(250) UNIQUE
+);
+
+CREATE TABLE illness_status(
+	id int AUTO_INCREMENT PRIMARY KEY, 
+	status_name varchar(250) UNIQUE
+);
+
+
+CREATE TABLE login_status(
+	id int AUTO_INCREMENT PRIMARY KEY, 
+	status_name varchar(250) UNIQUE
+);
+
+CREATE TABLE logins(
+	id int AUTO_INCREMENT PRIMARY KEY, 
+	username varchar(250),
+	password varchar(250), 
+	status_id  int, 
+	FOREIGN KEY (status_id) REFERENCES login_status(id)
+); 
+
+CREATE TABLE employees(
+	id int AUTO_INCREMENT PRIMARY KEY, 
+	essn int(10) UNIQUE, 
+	name varchar(250), 
+	phone_no varchar(15), 
+	address longtext, 
+	salary double (100,2), 
+	department varchar(250), 
+	login_id int, 
+	admin_status_id int, 
+	FOREIGN KEY (admin_status_id) REFERENCES admin_status(id), 
+	FOREIGN KEY (login_id) REFERENCES logins(id)
+);
+
+CREATE TABLE insurance(
+	id int AUTO_INCREMENT PRIMARY KEY, 
+	insrurance_id varchar(250), 
+	company_name varchar(250), 
+	insurance_pay double(10,2),
+	copay double(10,2),
+	p_s varchar(15)
+);
+
+CREATE TABLE physicians(
+	id int AUTO_INCREMENT PRIMARY KEY, 
+	pssn int(9) UNIQUE, 
+	name varchar(100), 
+	phone_no varchar(15),
+	address longtext, 
+	department varchar(40), 
+	internship varchar(90), 
+	employee_id int, 
+	login_id int, 
+	FOREIGN KEY (login_id) REFERENCES logins(id), 
+	FOREIGN KEY (employee_id) REFERENCES employees(id)
+);
+
+CREATE TABLE patients(
+	id int AUTO_INCREMENT PRIMARY KEY, 
+	ssn int(9) UNIQUE,
+	name varchar(250), 
+	dob date, 
+	address longtext, 
+	phone_no varchar(15), 
+	physician_id int, 
+	insurance_id int, 
+	FOREIGN KEY (physician_id) REFERENCES physicians(id), 
+	FOREIGN KEY (insurance_id) REFERENCES insurance(id)
+);
+
+CREATE TABLE appointments(
+	id int AUTO_INCREMENT PRIMARY KEY,
+	patient_id int, 
+	physician_id int, 
+	employee_id int, 
+	date_for  date, 
+	times time, 
+	FOREIGN KEY (patient_id) REFERENCES patients(id), 
+	FOREIGN KEY (physician_id) REFERENCES physicians(id), 
+	FOREIGN KEY (employee_id) REFERENCES employees(id)
+);
+
+
+CREATE TABLE medical_records(
+	id int AUTO_INCREMENT PRIMARY KEY, 
+	sex varchar(10), 
+	patient_id int, 
+	disability_status int,
+	diabetes_status int,
+	blood_pressure_status int,
+	allergies_status int, 
+	FOREIGN KEY (patient_id) REFERENCES patients(id), 
+	FOREIGN KEY (disability_status) REFERENCES illness_status(id), 
+	FOREIGN KEY (diabetes_status) REFERENCES illness_status(id), 
+	FOREIGN KEY (blood_pressure_status) REFERENCES illness_status(id), 
+	FOREIGN KEY (allergies_status) REFERENCES illness_status(id)
+);
+
+
+CREATE TABLE medications(
+	id int AUTO_INCREMENT PRIMARY KEY, 
+	code varchar(250),
+	name varchar(250), 
+	brand varchar(250), 
+	description longtext, 
+	physician_id int, 
+	FOREIGN KEY (physician_id) REFERENCES physicians(id)
+);
+
+CREATE TABLE prescriptions(
+	id int AUTO_INCREMENT PRIMARY KEY, 
+	patient_id int, 
+	physician_id int, 
+	examination longtext, 
+	FOREIGN KEY (physician_id) REFERENCES physicians(id), 
+	FOREIGN KEY (patient_id) REFERENCES patients(id)
+);
+
+CREATE TABLE medicines_list(
+	id int AUTO_INCREMENT PRIMARY KEY, 
+	medication_id int, 
+	prescription_id int, 
+	dose varchar(40), 
+	FOREIGN KEY (medication_id) REFERENCES medications(id), 
+	FOREIGN KEY (prescription_id) REFERENCES prescriptions(id)
+);
