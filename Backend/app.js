@@ -7,7 +7,6 @@ const cors = require('cors')
 const login_statusRoutes = require("./routes/login_status.route");
 const loginsRoutes = require("./routes/logins.route");
 
-
 // <---> 
 dotenv.config();
 
@@ -20,7 +19,6 @@ app.use(cors());
 // <-- ROUTES -->
 app.use("/api/login_status", login_statusRoutes);
 app.use("/api/logins", loginsRoutes);
-
 
 // <-- -->
 app.listen(process.env.SERVER_PORT_NO, () => {

@@ -12,7 +12,7 @@ exports.getUser = (req, res, next) => {
         'password' : req.body.password,
     };
     // Validation Code here
-    if(!validator.isEmail(data.email)) {
+    if(!validator.isEmail(data.username)) {
         validated = false;
     }
     if(validator.isEmpty(data.password , {ignore_whitespace: true})) {

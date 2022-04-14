@@ -140,7 +140,7 @@ INSERT INTO `illness_status` (`id`, `status_name`)
 VALUES (NULL, 'YES'), (NULL, 'NO');
 
 INSERT INTO `logins` (`id`, `username`, `password`, `status_id`) 
-VALUES (NULL, 'tanjumtanvir', '12345', '1');
+VALUES (NULL, 'tanjumtanvir@gmail.com', '12345', '1');
 
 INSERT INTO `employees` (`id`, `essn`, `name`, `phone_no`, `address`, `salary`, `department`, `login_id`, `admin_status_id`) 
 VALUES (NULL, '1011201127', 'TANVIR TANJUM SHOURAV', '+8801515217821', 'Motijheel A.G.B Colony B-6/E-4, Motijheel, Dhaka-1000, Bangladesh', '10000', 'Neuro', '1', '1');
