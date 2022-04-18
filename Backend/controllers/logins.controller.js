@@ -75,17 +75,16 @@ exports.updateUserPassword = (req, res, next) => {
 exports.postUser = (req, res, next) => {
     var validated = true;
     const data = {
-        'email' : req.body.email,
+        'username' : req.body.email,
         'password' : req.body.password,
-        'role_id' : req.body.role_id,
-        'access_id' : req.body.access_id,
+        'status_id' : req.body.status_id,
     };
 
-    if(validator.isEmpty(data.email , {ignore_whitespace: true})) {
+    if(validator.isEmpty(data.username , {ignore_whitespace: true})) {
         validated = false;
     }
 
-    if(!validator.isEmail(data.email)) {
+    if(!validator.isEmail(data.username)) {
         validated = false;
     }
 
@@ -93,11 +92,7 @@ exports.postUser = (req, res, next) => {
         validated = false;
     }
 
-    if(validator.isEmpty(data.role_id , {ignore_whitespace: true})) {
-        validated = false;
-    }
-
-    if(validator.isEmpty(data.access_id , {ignore_whitespace: true})) {
+    if(validator.isEmpty(data.status_id , {ignore_whitespace: true})) {
         validated = false;
     }
 
@@ -123,7 +118,7 @@ exports.postUser = (req, res, next) => {
 exports.getEmail = (req, res, next) => {
     var validated = true;
     const data = {
-        'email' : "%"+req.params.email+"%",
+        'username' : "%"+req.params.email+"%",
     };
     // Validation Code here
     // if(!validator.isEmail(data.email)) {
@@ -186,30 +181,17 @@ exports.updateUserEmail = (req, res, next) => {
     var validated = true;
     const data = {
         'id' : req.body.id,
-        'email' : req.body.email,
+        'username' : req.body.username,
     };
     // Validation Code here
-    if(validator.isEmpty(data.email , {ignore_whitespace: true})) {
+    if(validator.isEmpty(data.username , {ignore_whitespace: true})) {
         validated = false;
     }
 
-    if(!validator.isEmail(data.email)) {
+    if(!validator.isEmail(data.username)) {
         validated = false;
     }
 
-    emailCheck(data.email)
-    .then(function (res) {
-        // Returns "true" if the email address exists, "false" if it doesn't.
-    })
-    .catch(function (err) {
-        if (err.message === 'refuse') {
-        // The MX server is refusing requests from your IP address.
-        validated = false;
-        } else {
-        // Decide what to do with other errors.
-        validated = false;
-        }
-    });
 
     if(validated) {
         loginsService.updateUserEmail(data, (error, results) => {
@@ -233,15 +215,10 @@ exports.updateUserRole = (req, res, next) => {
     var validated = true;
     const data = {
         'id' : req.body.id,
-        'role_id' : req.body.role_id,
-        'access_id': req.body.access_id
+        'status_id' : req.body.status_id,
     };
     // Validation Code here
-    if(validator.isEmpty(data.role_id , {ignore_whitespace: true})) {
-        validated = false;
-    }
-
-    if(validator.isEmpty(data.access_id , {ignore_whitespace: true})) {
+    if(validator.isEmpty(data.status_id , {ignore_whitespace: true})) {
         validated = false;
     }
 

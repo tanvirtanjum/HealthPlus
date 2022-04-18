@@ -44,8 +44,8 @@ exports.updateUserPassword = (data, callback) => {
 
 exports.postUser = (data, callback) => {
     db.query(
-        `INSERT INTO logins(email, password, role_id, access_id) VALUES (?, ?, ?, ?);`,
-        [data.email, data.password, data.role_id, data.access_id],
+        `INSERT INTO logins(username, password, status_id) VALUES (?, ?, ?);`,
+        [data.username, data.password, data.status_id],
         (error, results, fields) => {
             if (error) {
                 return callback(error);
@@ -57,8 +57,8 @@ exports.postUser = (data, callback) => {
 
 exports.getEmail = (data, callback) => {
     db.query(
-        `SELECT email FROM logins WHERE email LIKE ?;`,
-        [data.email],
+        `SELECT username FROM logins WHERE username LIKE ?;`,
+        [data.username],
         (error, results, fields) => {
             if (error) {
                 return callback(error);
@@ -71,7 +71,7 @@ exports.getEmail = (data, callback) => {
 
 exports.getLogin = (data, callback) => {
     db.query(
-        `SELECT id, email, role_id, access_id FROM logins WHERE id = ?;`,
+        `SELECT id, username, status_id FROM logins WHERE id = ?;`,
         [data.id],
         (error, results, fields) => {
             if (error) {
@@ -85,8 +85,8 @@ exports.getLogin = (data, callback) => {
 
 exports.updateUserEmail = (data, callback) => {
     db.query(
-        `UPDATE logins SET email = ?, updated_at = current_timestamp WHERE id = ?;`,
-        [data.email, data.id],
+        `UPDATE logins SET username = ? WHERE id = ?;`,
+        [data.username, data.id],
         (error, results, fields) => {
             if (error) {
                 return callback(error);
@@ -99,23 +99,8 @@ exports.updateUserEmail = (data, callback) => {
 
 exports.updateUserRole = (data, callback) => {
     db.query(
-        `UPDATE logins SET role_id = ?, access_id = ?, updated_at = current_timestamp WHERE id = ?;`,
-        [data.role_id, data.access_id, data.id],
-        (error, results, fields) => {
-            if (error) {
-                return callback(error);
-            }
-
-            return callback(null, results);
-        }
-    );
-};
-
-
-exports.sendUserPassword = (data, callback) => {
-    db.query(
-        `SELECT logins.*, access.access_name FROM logins INNER JOIN access ON logins.access_id = access.id WHERE logins.id = ?;`,
-        [data.id],
+        `UPDATE logins SET status_id = ? WHERE id = ?;`,
+        [data.status_id, data.id],
         (error, results, fields) => {
             if (error) {
                 return callback(error);

@@ -17,7 +17,7 @@ $(document).ready(function () {
         }
         if(role == 2)
         {
-            window.location.href = base_URL+"/views/Teacher/Dashboard.html";
+            window.location.href = base_URL+"/views/Physician/Dashboard.html";
         }
     }
     
@@ -32,7 +32,7 @@ $(document).ready(function () {
             decryptLoginInfo = decryptLoginInfo.toString(CryptoJS.enc.Utf8);
             decryptLoginInfo = JSON.parse(decryptLoginInfo);
             
-            redirect(decryptLoginInfo.role_id);
+            redirect(decryptLoginInfo.status_id);
         }
     }
 
@@ -82,7 +82,7 @@ $(document).ready(function () {
                         $('#msg').attr('hidden', true);
 
                         //USER TYPE WISE REDIRECTION
-                        // redirect(data.status_id);
+                        redirect(data.status_id);
                     }
                     else
                     {

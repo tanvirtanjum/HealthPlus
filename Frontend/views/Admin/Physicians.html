@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physicians | HealthPlus</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="../../assets/image/logo/logo.png">
+
+    <link href="../../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../assets/fontawesome/css/all.css" rel="stylesheet">
+    <link href="../../assets/css/all.css" rel="stylesheet">
+    <script src="../../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../../assets/jQuery/jQuery.js"></script>
+    <script type="text/javascript" src="../../assets/jQueryTyper/jquery.typer.js"></script>
+    <script src="../../assets/crypto-js/crypto.js"></script>
+
+    <!-- URL Controller -->
+    <script type="text/javascript" src="../../controllers/urlController.js"></script>
+
+    <!-- Controller -->
+    <script type="text/javascript" src="../../controllers/Admin/PhysiciansController.js"></script>
+</head>
+
+<body class="bg-secondary bg-opacity-75">
+    <div class="container-fluid mb-lg-5" id="topLayout" style="padding-bottom: 2vh;"></div>
+
+    <div class="container-fluid">
+
+      <div class="d-grid gap-2 col-6 mx-auto mb-2" align="center">
+          <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+              <i class="fas fa-pen"></i>&nbsp; Add New Physician
+          </button>
+      </div>
+
+      <!-- Add Modal -->
+      <div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="addEmployeeModalLabel"><i class="fas fa-pen"></i>&nbsp;Add Physician</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <div class="alert mb-2" id="msgP" role="alert" align="center"></div>
+                      <div class="form-floating mb-2">
+                          <!-- <textarea class="form-control" placeholder="Write Subject" id="nameP" style="resize: none;"></textarea> -->
+                          <input type="text" class="form-control" placeholder="Write Subject" id="nameP">
+                          <label for="nameP">Name</label>
+                      </div>
+
+                      <div class="form-floating mb-2">
+                          <input type="text" class="form-control" placeholder="Write Subject" id="contactP">
+                          <label for="contactP">Contact No.</label>
+                      </div>
+
+                      <div class="form-floating mb-2">
+                          <input type="email" class="form-control" placeholder="Write Subject" id="emailP">
+                          <label for="emailP">Email</label>
+                      </div>
+
+                      <div class="form-floating mb-2">
+                          <input type="text" class="form-control" placeholder="Write Subject" id="deptP">
+                          <label for="deptP">Department</label>
+                      </div>
+
+                      <div class="form-floating mb-2">
+                          <textarea class="form-control" placeholder="Leave a comment here" id="addressP" style="height: 100px"></textarea>
+                          <label for="addressP">Address</label>
+                      </div>
+
+                      <div class="form-floating mb-2">
+                          <select class="form-select" id="statusP" aria-label="Floating label select example">
+                            
+                          </select>
+                          <label for="statusP">Assistant</label>
+                      </div>
+
+                      <div class="form-floating mb-2">
+                          <input type="text" class="form-control" placeholder="Write Subject" id="internP">
+                          <label for="internP">Internship</label>
+                      </div>
+                      
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" id="postBTN" class="btn btn-success">Add</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+
+      <div class="input-group mb-2">
+          <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
+          <input type="text" id="search" class="form-control" placeholder="Search By Physician Name or PSSN" aria-label="Search By Employee Name" aria-describedby="basic-addon1">
+      </div>
+
+      <div class="table-responsive">
+          <table class="table table-light table-bordered table-striped" id="empTable">
+            <thead class="table-dark">
+              <th scope="col">#</th>
+              <th scope="col">ESSN</th>
+              <th scope="col">NAME</th>
+              <th scope="col">DEPT</th>
+              <th></th>
+            </thead>
+            <tbody>
+              
+            </tbody>
+          </table>
+      </div>
+
+
+      <!-- Update Modal -->
+  <div class="modal fade" id="updateEmployeeModal" tabindex="-1" aria-labelledby="updateEmployeeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="updateEmployeeModalLabel"><i class="fas fa-pen"></i>&nbsp;Update Physician</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <div class="alert mb-2" id="msgU" role="alert" align="center"></div>
+                  <div class="form-floating mb-2">
+                      <input type="hidden" id="id">
+                      <input type="text" class="form-control" placeholder="Write Subject" id="nameU">
+                      <label for="nameU">Name</label>
+                  </div>
+
+                  <div class="form-floating mb-2">
+                      <input type="text" class="form-control" placeholder="Write Subject" id="pssnU" readonly>
+                      <label for="pssnU">PSSN</label>
+                  </div>
+
+                  <div class="form-floating mb-2">
+                      <input type="text" class="form-control" placeholder="Write Subject" id="contactU">
+                      <label for="contactU">Contact No.</label>
+                  </div>
+
+                  <div class="form-floating mb-2">
+                      <input type="email" class="form-control" placeholder="Write Subject" id="emailU" readonly>
+                      <label for="emailU">Email</label>
+                  </div>
+
+                  <div class="form-floating mb-2">
+                      <input type="text" class="form-control" placeholder="Write Subject" id="deptU">
+                      <label for="deptU">Department</label>
+                  </div>
+
+                  <div class="form-floating mb-2">
+                      <textarea class="form-control" placeholder="Leave a comment here" id="addressU" style="height: 100px"></textarea>
+                      <label for="addressU">Address</label>
+                  </div>
+
+                  <div class="form-floating mb-2">
+                    <select class="form-select" id="statusU" aria-label="Floating label select example">
+                      
+                    </select>
+                    <label for="statusU">Assistant</label>
+                </div>
+
+                <div class="form-floating mb-2">
+                    <input type="text" class="form-control" placeholder="Write Subject" id="internU">
+                    <label for="internU">Internship</label>
+                </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <div id="renderEmBtn">
+                      
+                  </div>
+                  <button type="button" id="updateBTN" class="btn btn-success">Update</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+
+  <!-- Update Email Modal -->
+  <div class="modal fade" id="updateEmployeeEmailModal" tabindex="-1" aria-labelledby="updateEmployeeEmailModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="updateEmployeeEmailModalLabel"><i class="fas fa-pen"></i>&nbsp;Update Email</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <div class="alert mb-2" id="msgU3" role="alert" align="center"></div>
+
+                  <div class="form-floating mb-2">
+                      <input type="hidden" id="idu3">
+                      <input type="email" class="form-control" placeholder="Write Subject" id="emailU2" readonly>
+                      <label for="emailU2">Current Email</label>
+                  </div>
+
+                  <div class="form-floating mb-2">
+                      <input type="email" class="form-control" placeholder="Write Subject" id="nemailU2">
+                      <label for="nemailU2">New Email</label>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" id="updateEmailBTN" class="btn btn-success">Update</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  </div>
+
+
+
+    <div class="container-fluid text-center" id="bottomLayout"></div>
+</body>
+
+</html>
