@@ -1,43 +1,16 @@
 // Importing System Library Modules
 const validator = require('validator');
 
-const appointmentsService = require("../services/appointments.service");
+const prescriptionsService = require("../services/prescriptions.service");
 
 exports.getAllRecords = (req, res, next) => {
-    var validated = true;
-    const data = {};
-
-    if(validated){
-        appointmentsService.getAllRecords(data, (error, results) => {
-            if (error) {
-                console.log(error);
-                return res.status(400).send({ success: false, data: "Bad Request. {{--> "+error+" <--}}" });
-            }
-            else {
-                if (results.length > 0) {
-                    return res.status(200).send(results);
-                }
-    
-                else {
-                    return res.status(204).send({ success: false, data: "No Data Found." });
-                }
-            }
-        });
-    }
-    else{
-        return res.status(401).send({ success: false, data: "Unauthorized Request." })
-    }
-
-};
-
-exports.getRecord = (req, res, next) => {
     var validated = true;
     const data = {
         'id' : req.params.id,
     };
 
     if(validated){
-        appointmentsService.getRecord(data, (error, results) => {
+        prescriptionsService.getAllRecords(data, (error, results) => {
             if (error) {
                 console.log(error);
                 return res.status(400).send({ success: false, data: "Bad Request. {{--> "+error+" <--}}" });
@@ -57,16 +30,17 @@ exports.getRecord = (req, res, next) => {
         return res.status(401).send({ success: false, data: "Unauthorized Request." })
     }
 
+
 };
 
-exports.getRecordByPhysician = (req, res, next) => {
+exports.getRecordByAppointment = (req, res, next) => {
     var validated = true;
     const data = {
         'id' : req.params.id,
     };
 
     if(validated){
-        appointmentsService.getRecordByPhysician(data, (error, results) => {
+        prescriptionsService.getRecordByAppointment(data, (error, results) => {
             if (error) {
                 console.log(error);
                 return res.status(400).send({ success: false, data: "Bad Request. {{--> "+error+" <--}}" });
@@ -94,22 +68,17 @@ exports.postRecord = (req, res, next) => {
     const data = {
         'patient_id' : req.body.patient_id,
         'physician_id' : req.body.physician_id ,
-        'employee_id' : req.body.employee_id,
-        'date_for' : req.body.date_for,
-        'times' : req.body.times,
+        'appointment_id' : req.body.appointment_id,
+        'examination' : req.body.examination,
     };
 
-    if(validator.isEmpty(data.date_for , {ignore_whitespace: true})) {
-        validated = false;
-    }
-
-    if(validator.isEmpty(data.times , {ignore_whitespace: true})) {
+    if(validator.isEmpty(data.examination , {ignore_whitespace: true})) {
         validated = false;
     }
 
     if(validated){
         console.log(data);
-        appointmentsService.postRecord(data, (error, results) => {
+        prescriptionsService.postRecord(data, (error, results) => {
             if (error) {
                 console.log(error);
                 return res.status(400).send({ success: false, data: "Bad Request. {{--> "+error+" <--}}" });
@@ -130,54 +99,21 @@ exports.updateRecord = (req, res, next) => {
     var validated = true;
     const data = {
         'id' : req.params.id,
-        'patient_id' : req.body.patient_id,
-        'physician_id' : req.body.physician_id ,
-        'employee_id' : req.body.employee_id,
-        'date_for' : req.body.date_for,
-        'times' : req.body.times,
+        'examination' : req.body.examination,
     };
 
-    if(validator.isEmpty(data.date_for , {ignore_whitespace: true})) {
-        validated = false;
-    }
-
-    if(validator.isEmpty(data.times , {ignore_whitespace: true})) {
+    if(validator.isEmpty(data.examination , {ignore_whitespace: true})) {
         validated = false;
     }
 
     if(validated){
-        appointmentsService.updateRecord(data, (error, results) => {
+        prescriptionsService.updateRecord(data, (error, results) => {
             if (error) {
                 console.log(error);
                 return res.status(400).send({ success: false, data: "Bad Request. {{--> "+error+" <--}}" });
             }
             else {
                 return res.status(200).send(results);
-            }
-        });
-    }
-    else{
-        return res.status(401).send({ success: false, data: "Unauthorized Request." })
-    }
-
-};
-
-exports.deleteRecord = (req, res, next) => {
-    var validated = true;
-    const data = {
-        'id' : req.params.id,
-    };
-
-    
-
-    if(validated){
-        appointmentsService.deleteRecord(data, (error, results) => {
-            if (error) {
-                console.log(error);
-                return res.status(400).send({ success: false, data: "Bad Request. {{--> "+error+" <--}}" });
-            }
-            else {
-                return res.status(204).send(results);
             }
         });
     }

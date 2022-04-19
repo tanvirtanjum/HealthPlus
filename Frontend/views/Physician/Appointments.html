@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments | HealthPlus</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="../../assets/image/logo/logo.png">
+
+    <link href="../../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../assets/fontawesome/css/all.css" rel="stylesheet">
+    <link href="../../assets/css/all.css" rel="stylesheet">
+    <script src="../../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../../assets/jQuery/jQuery.js"></script>
+    <script type="text/javascript" src="../../assets/jQueryTyper/jquery.typer.js"></script>
+    <script src="../../assets/crypto-js/crypto.js"></script>
+
+    <!-- URL Controller -->
+    <script type="text/javascript" src="../../controllers/urlController.js"></script>
+
+    <!-- Controller -->
+    <script type="text/javascript" src="../../controllers/Physician/AppointmentsController.js"></script>
+</head>
+
+<body class="bg-secondary bg-opacity-75">
+  <div class="container-fluid mb-lg-5" id="topLayout" style="padding-bottom: 2vh;"></div>
+
+  <div class="container-fluid">
+
+    <input type="hidden" id="myID">
+
+    <div class="table-responsive">
+        <table class="table table-light table-bordered table-striped" id="empTable">
+          <thead class="table-dark">
+            <th scope="col">#</th>
+            <th scope="col">PATIENT</th>
+            <th scope="col">DATE</th>
+            <th scope="col">TIME</th>
+            <th scope="col">PHYSICIAN</th>
+            <th scope="col">ADDED BY</th>
+            <th></th>
+          </thead>
+          <tbody>
+            
+          </tbody>
+        </table>
+    </div>
+
+
+    <!-- Update Modal -->
+    <div class="modal fade" id="updateEmployeeModal" tabindex="-1" aria-labelledby="updateEmployeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateEmployeeModalLabel"><i class="fas fa-pen"></i>&nbsp;View Appointment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert mb-2" id="msgU" role="alert" align="center"></div>
+                    <input type="hidden" id="id">
+                    <div class="form-floating mb-2">
+                        <select class="form-select" id="patU" aria-label="Floating label select example" disabled>
+                          
+                        </select>
+                        <label for="patU">Patient</label>
+                    </div>
+    
+                    <div class="form-floating mb-2">
+                        <select class="form-select" id="phyU" aria-label="Floating label select example" disabled>
+                          
+                        </select>
+                        <label for="phyU">Physician</label>
+                    </div>
+    
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" placeholder="Write Subject" id="dateU" readonly>
+                        <label for="dateU">Meet-up Date</label>
+                    </div>
+    
+                    <div class="form-floating mb-2">
+                        <input type="time" class="form-control" id="timeU" readonly>
+                        <label for="timeU">Meet-up Time</label>
+                    </div>
+
+                    <br>
+                    <div id="ren" align="center">
+
+                    </div>
+                    <br>
+                    <p class="h3">Prescription</p>
+    
+                    <div class="table-responsive">
+                        <table class="table table-light table-bordered table-striped" id="preTable">
+                          <thead class="table-dark">
+                            <th scope="col">#</th>
+                            <th scope="col">PRESCRIPTION IDENTIFICATION</th>
+                            <th></th>
+                          </thead>
+                          <tbody>
+                            
+                          </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+     <!-- Update Modal -->
+     <div class="modal fade" id="updatePModal" tabindex="-1" aria-labelledby="updatePModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updatePsModalLabel"><i class="fas fa-pen"></i>&nbsp;Add Prescription</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="id_a">
+                    <input type="hidden" id="id_pat">
+                    <input type="hidden" id="id_phy">
+    
+                    <div class="alert mb-2" id="msgU2" role="alert" align="center"></div>
+
+                    <div class="form-floating mb-2">
+                        <textarea class="form-control" id="exU"></textarea>
+                        <label for="exU">Examination</label>
+                    </div>
+
+                    <br>
+                
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="postBTN" class="btn btn-success">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Update Modal -->
+<div class="modal fade" id="updatePUModal" tabindex="-1" aria-labelledby="updatePUModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updatePUModalLabel"><i class="fas fa-pen"></i>&nbsp;Add Prescription</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="id_i_i">
+
+                <div class="alert mb-2" id="msgU33" role="alert" align="center"></div>
+
+                <div class="form-floating mb-2">
+                    <textarea class="form-control" id="exUU"></textarea>
+                    <label for="exUU">Examination</label>
+                </div>
+
+                <br>
+                    <p class="h3">Prescribe Medicines</p>
+    
+                    <div class="form-floating mb-2">
+                        <select class="form-select" id="med" aria-label="Floating label select example">
+                          
+                        </select>
+                        <label for="med">Medicine</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <textarea class="form-control" id="dose"></textarea>
+                        <label for="dose">Dose</label>
+                    </div>
+                    <div align="center">
+                        <button type="button" id="amBTN" class="btn btn-success">Add</button>
+                    </div>
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table table-light table-bordered table-striped" id="medTable">
+                          <thead class="table-dark">
+                            <th scope="col">#</th>
+                            <th scope="col">MEDICINE NAME</th>
+                            <th scope="col">DOSE</th>
+                            <th></th>
+                          </thead>
+                          <tbody>
+                            
+                          </tbody>
+                        </table>
+                    </div>
+            
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="upBTN" class="btn btn-success">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Update Role Modal -->
+<div class="modal fade" id="updatePDModal" tabindex="-1" aria-labelledby="updatePDModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updatePDModalLabel"><i class="fas fa-trash-alt"></i>&nbsp;Remove</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating mb-2">
+                    <div class="alert alert-warning mb-2" role="alert" align="center">Are you sure you want to remove?</div>
+                    <input type="hidden" id="idU4">
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="delBTN" class="btn btn-success">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    </div>
+
+  <div class="mt-5" id="bottomLayout"></div>
+</body>
+
+</html>

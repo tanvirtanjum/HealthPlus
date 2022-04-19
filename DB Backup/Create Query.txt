@@ -115,8 +115,10 @@ CREATE TABLE prescriptions(
 	id int AUTO_INCREMENT PRIMARY KEY, 
 	patient_id int NOT NULL, 
 	physician_id int NOT NULL, 
+        appointment_id int NOT NULL,
 	examination longtext NOT NULL, 
 	FOREIGN KEY (physician_id) REFERENCES physicians(id), 
+        FOREIGN KEY (appointment_id) REFERENCES appointments(id), 
 	FOREIGN KEY (patient_id) REFERENCES patients(id)
 );
 

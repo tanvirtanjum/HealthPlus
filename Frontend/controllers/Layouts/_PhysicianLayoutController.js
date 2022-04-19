@@ -3,30 +3,32 @@ $(document).ready(function () {
     // var api_base_URL = "http://localhost:3000";
 
     $('#dashTab').attr("href", base_URL+"/views/Physician/Dashboard.html");
-    $('#aboutTab').attr("href", base_URL+"/views/Public/About_Us.html");
-    $('#signinTab').attr("href", base_URL+"/views/Public/SignIn.html");
+    $('#medTab').attr("href", base_URL+"/views/Physician/Medications.html");
+    $('#appTab').attr("href", base_URL+"/views/Physician/Appointments.html");
+
 
     function activeSection()
     {
         if(window.location.href == base_URL+"/views/Physician/Dashboard.html")
         {
             $('#dashTab').addClass("active");
-            $('#aboutTab').removeClass("active");
-            $('#signinTab').removeClass("active");
+            $('#medTab').removeClass("active");
+            $('#appTab').removeClass("active");
+
         }
 
-        if(window.location.href == base_URL+"/views/Public/About_Us.html")
+        if(window.location.href == base_URL+"/views/Physician/Medications.html")
         {
-            $('#homeTab').removeClass("active");
-            $('#aboutTab').addClass("active");
-            $('#signinTab').removeClass("active");
+            $('#dashTab').removeClass("active");
+            $('#medTab').addClass("active");
+            $('#appTab').removeClass("active");
         }
 
-        if(window.location.href == base_URL+"/views/Public/SignIn.html")
+        if(window.location.href == base_URL+"/views/Physician/Appointments.html")
         {
-            $('#homeTab').removeClass("active");
-            $('#aboutTab').removeClass("active");
-            $('#signinTab').addClass("active");
+            $('#dashTab').removeClass("active");
+            $('#medTab').removeClass("active");
+            $('#appTab').addClass("active");
         }
 
     }

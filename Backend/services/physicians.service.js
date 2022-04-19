@@ -32,6 +32,22 @@ exports.getPhysician = (data, callback) => {
     );
 };
 
+exports.getPhysicianByLogin = (data, callback) => {
+    db.query(
+        `SELECT physicians.*, logins.username, login_status.status_name FROM physicians `+ 
+        `INNER JOIN logins ON physicians.login_id = logins.id `+
+        `INNER JOIN login_status ON logins.status_id = login_status.id `+
+        `WHERE physicians.login_id = ?; `,
+        [data.id],
+        (error, results, fields) => {
+            if (error) {
+                return callback(error);
+            }
+            return callback(null, results);
+        }
+    );
+};
+
 exports.getPhysiciansByNameOrEssn = (data, callback) => {
     db.query(
         `SELECT physicians.*, logins.username, login_status.status_name FROM physicians `+ 
