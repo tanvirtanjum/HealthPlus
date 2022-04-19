@@ -15,7 +15,7 @@ exports.getAllRecords = (req, res, next) => {
             }
             else {
                 if (results.length > 0) {
-                    return res.status(200).send(results[0]);
+                    return res.status(200).send(results);
                 }
     
                 else {
@@ -37,7 +37,7 @@ exports.getRecord = (req, res, next) => {
     };
 
     if(validated){
-        medical_recordsService.getRecord(data, (error, results) => {
+        appointmentsService.getRecord(data, (error, results) => {
             if (error) {
                 console.log(error);
                 return res.status(400).send({ success: false, data: "Bad Request. {{--> "+error+" <--}}" });
@@ -63,21 +63,24 @@ exports.getRecord = (req, res, next) => {
 exports.postRecord = (req, res, next) => {
     var validated = true;
     const data = {
-        'sex' : req.body.sex,
         'patient_id' : req.body.patient_id,
-        'disability_status' : req.body.disability_status,
-        'diabetes_status' : req.body.diabetes_status,
-        'blood_pressure_status' : req.body.blood_pressure_status,
-        'allergies_status' : req.body.allergies_status,
+        'physician_id' : req.body.physician_id ,
+        'employee_id' : req.body.employee_id,
+        'date_for' : req.body.date_for,
+        'times' : req.body.times,
     };
 
-    if(validator.isEmpty(data.patient_id , {ignore_whitespace: true})) {
+    if(validator.isEmpty(data.date_for , {ignore_whitespace: true})) {
+        validated = false;
+    }
+
+    if(validator.isEmpty(data.times , {ignore_whitespace: true})) {
         validated = false;
     }
 
     if(validated){
         console.log(data);
-        medical_recordsService.postRecord(data, (error, results) => {
+        appointmentsService.postRecord(data, (error, results) => {
             if (error) {
                 console.log(error);
                 return res.status(400).send({ success: false, data: "Bad Request. {{--> "+error+" <--}}" });
@@ -98,26 +101,54 @@ exports.updateRecord = (req, res, next) => {
     var validated = true;
     const data = {
         'id' : req.params.id,
-        'sex' : req.body.sex,
-        'disability_status' : req.body.disability_status,
-        'diabetes_status' : req.body.diabetes_status,
-        'blood_pressure_status' : req.body.blood_pressure_status,
-        'allergies_status' : req.body.allergies_status,
+        'patient_id' : req.body.patient_id,
+        'physician_id' : req.body.physician_id ,
+        'employee_id' : req.body.employee_id,
+        'date_for' : req.body.date_for,
+        'times' : req.body.times,
     };
 
-    if(data.id <= 0) {
+    if(validator.isEmpty(data.date_for , {ignore_whitespace: true})) {
         validated = false;
     }
 
+    if(validator.isEmpty(data.times , {ignore_whitespace: true})) {
+        validated = false;
+    }
 
     if(validated){
-        medical_recordsService.updateRecord(data, (error, results) => {
+        appointmentsService.updateRecord(data, (error, results) => {
             if (error) {
                 console.log(error);
                 return res.status(400).send({ success: false, data: "Bad Request. {{--> "+error+" <--}}" });
             }
             else {
                 return res.status(200).send(results);
+            }
+        });
+    }
+    else{
+        return res.status(401).send({ success: false, data: "Unauthorized Request." })
+    }
+
+};
+
+exports.deleteRecord = (req, res, next) => {
+    var validated = true;
+    const data = {
+        'id' : req.params.id,
+    };
+
+    
+
+    if(validated){
+        appointmentsService.deleteRecord(data, (error, results) => {
+            if (error) {
+                console.log(error);
+                return res.status(400).send({ success: false, data: "Bad Request. {{--> "+error+" <--}}" });
+            }
+            else {
+                return res.status(204).send(results);
             }
         });
     }

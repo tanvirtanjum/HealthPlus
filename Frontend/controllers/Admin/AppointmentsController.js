@@ -46,9 +46,35 @@ $(document).ready(function () {
     }
 
     // 
-    var LoadAllAssistantOptions = function(){
+    var LoadMyID = function(){
+        var decryptLoginInfo = CryptoJS.AES.decrypt(localStorage.loginInfo, '333');
+            decryptLoginInfo = decryptLoginInfo.toString(CryptoJS.enc.Utf8);
+            decryptLoginInfo = JSON.parse(decryptLoginInfo);
+
         $.ajax({
-            url: api_base_URL+"/api/employees/get-all-employees",
+            url: api_base_URL+"/api/employees/get-employee/login/"+decryptLoginInfo.id,
+            method: "GET",
+            complete: function (xhr, status) {
+                if (xhr.status == 200) {
+                    var data = xhr.responseJSON;
+
+                    $('#myID').val(data.id);
+
+                   
+                }
+                else 
+                {
+                    
+                }
+            }
+        });
+    }
+    LoadMyID();
+
+    // 
+    var LoadAllPhysicianOptions = function(){
+        $.ajax({
+            url: api_base_URL+"/api/physicians/get-all-physicians",
             method: "GET",
             complete: function (xhr, status) {
                 if (xhr.status == 200) {
@@ -60,7 +86,7 @@ $(document).ready(function () {
                     {
                         for (var i = 0; i < data.length; i++) 
                         {
-                            str += '<option value="'+data[i].id+'">'+data[i].essn+'-'+data[i].name+' ('+data[i].department+')</option>';
+                            str += '<option value="'+data[i].id+'">'+data[i].pssn+'-'+data[i].name+' ('+data[i].department+')</option>';
                         }
                     }
                     else
@@ -68,24 +94,61 @@ $(document).ready(function () {
                         str += "";
                     }
 
-                    $("#statusP").html(str);
-                    $("#statusU").html(str);
+                    $("#phyP").html(str);
+                    $("#phyU").html(str);
                 }
                 else 
                 {
                     str += "";
-                    $("#statusP").html(str);
-                    $("#statusU").html(str);
+                    $("#phyP").html(str);
+                    $("#phyU").html(str);
                 }
             }
         });
     }
-    LoadAllAssistantOptions();
+    LoadAllPhysicianOptions();
+
+    // 
+    var LoadAllPatientOptions = function(){
+        $.ajax({
+            url: api_base_URL+"/api/patients/get-all-patients",
+            method: "GET",
+            complete: function (xhr, status) {
+                if (xhr.status == 200) {
+                    var data = xhr.responseJSON;
+
+                    var str = '';
+
+                    if(data.length > 0)
+                    {
+                        for (var i = 0; i < data.length; i++) 
+                        {
+                            str += '<option value="'+data[i].id+'">'+data[i].ssn+'-'+data[i].name+'</option>';
+                        }
+                    }
+                    else
+                    {
+                        str += "";
+                    }
+
+                    $("#patP").html(str);
+                    $("#patU").html(str);
+                }
+                else 
+                {
+                    str += "";
+                    $("#patP").html(str);
+                    $("#patU").html(str);
+                }
+            }
+        });
+    }
+    LoadAllPatientOptions();
 
     //
-    var LoadAllPhysicians = function(){
+    var LoadAllAppointments = function(){
         $.ajax({
-            url: api_base_URL+"/api/physicians/get-all-physicians",
+            url: api_base_URL+"/api/appointments/get-records",
             method: "GET",
             complete: function (xhr, status) {
                 if (xhr.status == 200) {
@@ -99,30 +162,35 @@ $(document).ready(function () {
                         {
                             str += "<tr>"+
                                         "<th>"+ sl + "</th>"+
-                                        "<td>"+ data[i].pssn  +"</td>"+
-                                        "<td>"+ data[i].name +"</td>"+
-                                        "<td>"+ data[i].department  +"</td>"+
-                                        "<td>"+"<button type='button' data-bs-toggle='modal' data-bs-target='#updateEmployeeModal' data-bs-id='"+data[i].id+"' class='btn btn-sm btn-primary'><i class='fas fa-edit'></i> Edit</button></td>"+
+                                        "<td>"+ data[i].pat_name  +"</td>"+
+                                        "<td>"+ data[i].date_for +"</td>"+
+                                        "<td>"+ data[i].times  +"</td>"+
+                                        "<td>"+ data[i].phy_name  +"</td>"+
+                                        "<td>"+ data[i].emp_name  +"</td>"+
+                                        "<td>"+
+                                            "<button type='button' data-bs-toggle='modal' data-bs-target='#updateEmployeeModal' data-bs-id='"+data[i].id+"' class='btn btn-sm btn-primary'><i class='fas fa-edit'></i> Edit</button>&nbsp;"+
+                                            "<button type='button' data-bs-toggle='modal' data-bs-target='#updateEmployeeRoleModal' data-bs-id='"+data[i].id+"' class='btn btn-sm btn-danger'><i class='fas fa-trash-alt'></i> Delete</button>"+
+                                        "</td>"+
                                 "</tr>";
                             sl++;
                         }
                     }
                     else
                     {
-                        str += "<tr><td colspan='5' align='middle'>NO DATA FOUND</td></tr>";
+                        str += "<tr><td colspan='7' align='middle'>NO DATA FOUND</td></tr>";
                     }
 
                     $("#empTable tbody").html(str);
                 }
                 else 
                 {
-                    str += "<tr><td colspan='5' align='middle'>NO DATA FOUND</td></tr>";
+                    str += "<tr><td colspan='7' align='middle'>NO DATA FOUND</td></tr>";
                     $("#empTable tbody").html(str);
                 }
             }
         });
     }
-    LoadAllPhysicians();
+    LoadAllAppointments();
 
     // 
     $('#addEmployeeModal').on('show.bs.modal', function(e) {
@@ -130,68 +198,21 @@ $(document).ready(function () {
     });
 
     // 
-    var loadAllEmployeesByEmail = function (email) {
-        var result = true;
-        var decryptLoginInfo = CryptoJS.AES.decrypt(localStorage.loginInfo, '333');
-            decryptLoginInfo = decryptLoginInfo.toString(CryptoJS.enc.Utf8);
-            decryptLoginInfo = JSON.parse(decryptLoginInfo);
-
-            $.ajax({
-                url: api_base_URL+"/api/logins/checkemail/"+email,
-                method: "GET",
-                headers : {
-                    role : decryptLoginInfo.status_id,
-                },
-                complete: function (xhr, status) {
-                    if (xhr.status == 200) {
-                        var data = xhr.responseJSON;
-
-                        result = true;
-
-                        $('#emailP').addClass("is-invalid");
-                    }
-                    
-                    else {
-
-                        result = false;
-                        $('#emailP').removeClass("is-invalid");
-                    }
-                }
-            });
-
-            return result;
-    }
-    $("#emailP").on("keyup change",function(){
-        if($.trim($("#emailP").val()).length > 0)
-        {
-            $('#emailP').removeClass("is-invalid");
-            loadAllEmployeesByEmail($("#emailP").val());
-        }
-        else
-        {
-            $('#emailP').addClass("is-invalid");
-        }
-    });
-
-    // 
-    var InsertPhysician = function(id){
+    var InsertAppointment = function(id){
         var decryptLoginInfo = CryptoJS.AES.decrypt(localStorage.loginInfo, '333');
         decryptLoginInfo = decryptLoginInfo.toString(CryptoJS.enc.Utf8);
         decryptLoginInfo = JSON.parse(decryptLoginInfo);
 
         // console.log(login_id);
         $.ajax({
-            url: api_base_URL+"/api/physicians/post-physician",
+            url: api_base_URL+"/api/appointments/post-record",
             method: "POST",
             data : {
-                login_id: id,
-                pssn: (new Date().getTime()+'').substr(3,7),
-                name: $('#nameP').val(),
-                phone_no: $('#contactP').val(),
-                address: $('#addressP').val(),
-                employee_id: $('#statusP').val(),
-                internship: $('#internP').val(),
-                department: $('#deptP').val(),
+                patient_id : $('#patP').val(),
+                physician_id : $('#phyP').val(),
+                employee_id : $('#myID').val(),
+                date_for : $('#dateP').val(),
+                times : $('#timeP').val(),
             },
             headers : {
                 role : decryptLoginInfo.status_id,
@@ -204,7 +225,7 @@ $(document).ready(function () {
                     {
                         $("#msgP").removeClass("alert-danger");
                         $("#msgP").addClass("alert-success");
-                        $('#msgP').html('<small>Physician Added.</small>');
+                        $('#msgP').html('<small>Appointment Added.</small>');
                         $('#msgP').removeAttr('hidden');
 
                     }
@@ -223,104 +244,34 @@ $(document).ready(function () {
                     $('#msgP').html('<small>Something Went Wrong.</small>');
                     $('#msgP').removeAttr('hidden');
                 }
-                LoadAllPhysicians();
+                LoadAllAppointments();
             }
         });
     }
 
-    var InsertLogin = function(){
-        var decryptLoginInfo = CryptoJS.AES.decrypt(localStorage.loginInfo, '333');
-        decryptLoginInfo = decryptLoginInfo.toString(CryptoJS.enc.Utf8);
-        decryptLoginInfo = JSON.parse(decryptLoginInfo);
-
-        $.ajax({
-            url: api_base_URL+"/api/logins/insert-user",
-            method: "POST",
-            data : {
-                email: $('#emailP').val(),
-                password: Math.floor(100000 + Math.random() * 900000),
-                status_id: 2,
-            },
-            headers : {
-                role : decryptLoginInfo.status_id,
-            },
-            complete: function (xhr, status) {
-                if (xhr.status == 201) {
-                    var data = xhr.responseJSON;
-
-                    InsertPhysician(data.insertId);
-                }
-                else 
-                {
-                    alert("Something Went Wrong.");
-                }
-            }
-        });
-    }
-
-    var validatePhysicianInsert= function() {
+    var validateAppointmentInsert= function() {
         var validate = true;
-        if($.trim($('#nameP').val()).length <= 0)
+        if($.trim($('#dateP').val()).length <= 0)
         {
             validate = false;
-            $('#nameP').addClass("is-invalid");
+            $('#dateP').addClass("is-invalid");
         }
         else
         {
-            $("#nameP").removeClass("is-invalid");
+            $("#dateP").removeClass("is-invalid");
         }
 
-        if($.trim($('#emailP').val()).length <= 0)
+        if($.trim($('#timeP').val()).length <= 0)
         {
             validate = false;
-            $('#emailP').addClass("is-invalid");
+            $('#timeP').addClass("is-invalid");
         }
         else
         {
-
-            $("#emailP").removeClass("is-invalid");
+            $("#timeP").removeClass("is-invalid");
         }
 
-        if($.trim($("#contactP").val()).length <= 10)
-        {
-            validate = false;
-            $("#contactP").addClass("is-invalid");
-        }
-        else
-        {
-            $("#contactP").removeClass("is-invalid");
-        }
-
-
-        if($.trim($("#addressP").val()).length <= 0)
-        {
-            validate = false;
-            $("#addressP").addClass("is-invalid");
-        }
-        else
-        {
-            $("#addressP").removeClass("is-invalid");
-        }
-
-        if($.trim($("#deptP").val()).length <= 0)
-        {
-            validate = false;
-            $("#deptP").addClass("is-invalid");
-        }
-        else
-        {
-            $("#deptP").removeClass("is-invalid");
-        }
-
-        if($("#internP").val() <= 0)
-        {
-            validate = false;
-            $("#internP").addClass("is-invalid");
-        }
-        else
-        {
-            $("#internP").removeClass("is-invalid");
-        }
+        
 
         if(!validate)
         {
@@ -333,9 +284,9 @@ $(document).ready(function () {
     $("#postBTN").click(function () {
         $('#msgP').attr('hidden', true);
 
-        if(validatePhysicianInsert())
+        if(validateAppointmentInsert())
         {
-            InsertLogin();
+            InsertAppointment();
         }
         else
         {
@@ -344,26 +295,22 @@ $(document).ready(function () {
     });
 
     // 
-    var LoadPhysician = function(id){
+    var LoadAppointment = function(id){
         $.ajax({
-            url: api_base_URL+"/api/physicians/get-physician/"+id,
+            url: api_base_URL+"/api/appointments/get-record/"+id,
             method: "GET",
             complete: function (xhr, status) {
                 if (xhr.status == 200) {
                     
                    var data = xhr.responseJSON;
                 
-                   $('#nameU').val(data.name);
-                   $('#pssnU').val(data.pssn);
-                   $('#contactU').val(data.phone_no);
-                   $('#emailU').val(data.username);
-                   $('#addressU').val(data.address);
-                   $('#deptU').val(data.department);
-                   $('#statusU').val(data.employee_id);
-                   $('#internU').val(data.internship);
+                   $('#phyU').val(data.physician_id);
+                   $('#patU').val(data.patient_id);
+                   $('#dateU').val(data.date_for);
+                   $('#timeU').val(data.times);
+                   
                    $('#id').val(data.id);
-        
-                   $('#renderEmBtn').html("<button type='button' data-bs-toggle='modal' data-bs-target='#updateEmployeeEmailModal' data-bs-id='"+data.login_id+"' class='btn btn-dark'>Update Email</button>");
+    
                 }
                 else {}
             }
@@ -373,198 +320,41 @@ $(document).ready(function () {
     $('#updateEmployeeModal').on('show.bs.modal', function(e) {
         $('#msgU').attr('hidden', true);
         var id = $(e.relatedTarget).data('bs-id');
-        LoadPhysician(id);
+        LoadAppointment(id);
     });
 
 
-    // 
-    var LoadPhysicianLoginDetails2 = function(id){
-        var decryptLoginInfo = CryptoJS.AES.decrypt(localStorage.loginInfo, '333');
-        decryptLoginInfo = decryptLoginInfo.toString(CryptoJS.enc.Utf8);
-        decryptLoginInfo = JSON.parse(decryptLoginInfo);
 
-        $.ajax({
-            url: api_base_URL+"/api/logins/get-login/id/"+id,
-            method: "GET",
-            headers : {
-                role : decryptLoginInfo.status_id,
-            },
-            complete: function (xhr, status) {
-                if (xhr.status == 200) {
-                    
-                   var data = xhr.responseJSON;
-                
-                   $('#emailU2').val(data.username);
-                   $('#idu3').val(data.id);
-                }
-                else {}
-            }
-        });
-    }
-
-    $('#updateEmployeeEmailModal').on('show.bs.modal', function(e) {
+    $('#updateEmployeeRoleModal').on('show.bs.modal', function(e) {
         $('#msgU3').attr('hidden', true);
         var id = $(e.relatedTarget).data('bs-id');
-        LoadPhysicianLoginDetails2(id);
+        $('#idU4').val(id);
     });
 
     // 
-    var loadAllEmployeesByEmail2 = function (email) {
-        var decryptLoginInfo = CryptoJS.AES.decrypt(localStorage.loginInfo, '333');
-            decryptLoginInfo = decryptLoginInfo.toString(CryptoJS.enc.Utf8);
-            decryptLoginInfo = JSON.parse(decryptLoginInfo);
-
-            $.ajax({
-                url: api_base_URL+"/api/logins/checkemail/"+email,
-                method: "GET",
-                headers : {
-                    role : decryptLoginInfo.status_id,
-                },
-                complete: function (xhr, status) {
-                    if (xhr.status == 200) {
-                        var data = xhr.responseJSON;
-
-                        $('#nemailU2').addClass("is-invalid");
-                    }
-                    
-                    else {
-                        $('#nemailU2').removeClass("is-invalid");
-                    }
-                }
-            });
-    }
-    $("#nemailU2").on("keyup change",function(){
-        if($.trim($("#nemailU2").val()).length > 0)
-        {
-            $('#nemailU2').removeClass("is-invalid");
-            loadAllEmployeesByEmail2($("#nemailU2").val());
-        }
-        else
-        {
-            $('#nemailU2').addClass("is-invalid");
-        }
-    });
-
-    // 
-    var UpdateEmployeeEmail = function(){
-        var decryptLoginInfo = CryptoJS.AES.decrypt(localStorage.loginInfo, '333');
-        decryptLoginInfo = decryptLoginInfo.toString(CryptoJS.enc.Utf8);
-        decryptLoginInfo = JSON.parse(decryptLoginInfo);
-
-
-        $.ajax({
-            url: api_base_URL+"/api/logins/update-user-authentication-email",
-            method: "PUT",
-            data: {
-                id: $('#idu3').val(),
-                username: $('#nemailU2').val(),
-            },
-            headers : {
-                role : decryptLoginInfo.status_id,
-            },
-            complete: function (xhr, status) {
-                console.log($('#nemailU2').val()+"   "+ $('#idu3').val())
-                if (xhr.status == 200) {
-                    var data = xhr.responseJSON;
-
-                    if(data.affectedRows >= 1)
-                    {
-                        $("#msgU3").removeClass("alert-danger");
-                        $("#msgU3").addClass("alert-success");
-                        $('#msgU3').html('<small>Email Updated.</small>');
-                        $('#msgU3').removeAttr('hidden');
-                    }
-                    else 
-                    {
-                        alert("this")
-                        $("#msgU3").removeClass("alert-success");
-                        $("#msgU3").addClass("alert-danger");
-                        $('#msgU3').html('<small>Something Went Wrong.</small>');
-                        $('#msgU3').removeAttr('hidden');
-                    }
-                }
-                else 
-                {
-                    $("#msgU3").removeClass("alert-success");
-                    $("#msgU3").addClass("alert-danger");
-                    $('#msgU3').html('<small>Something Went Wrong.</small>');
-                    $('#msgU3').removeAttr('hidden');
-                }
-                LoadAllPhysicians();
-                LoadPhysician($('#id').val());
-                LoadPhysicianLoginDetails2($('#idu3').val());
-            }
-        });
-    }
-
-    $("#updateEmailBTN").click(function () {
-        $('#msgU3').attr('hidden', true);
-
-        if($('#nemailU2').hasClass("is-invalid"))
-        {
-            $('#nemailU2').addClass("is-invalid");
-        }
-        else
-        {
-            UpdateEmployeeEmail();
-        }
-    });
-
-
-    // 
-    var validatePhysicianUpdate= function() {
+    var validateAppointmentUpdate = function() {
         var validate = true;
-        if($.trim($('#nameU').val()).length <= 0)
+        if($.trim($('#dateU').val()).length <= 0)
         {
             validate = false;
-            $('#nameU').addClass("is-invalid");
+            $('#dateU').addClass("is-invalid");
         }
         else
         {
-            $("#nameU").removeClass("is-invalid");
+            $("#dateU").removeClass("is-invalid");
+        }
+
+        if($.trim($('#timeU').val()).length <= 0)
+        {
+            validate = false;
+            $('#timeU').addClass("is-invalid");
+        }
+        else
+        {
+            $("#timeU").removeClass("is-invalid");
         }
 
         
-        if($.trim($("#contactU").val()).length <= 10)
-        {
-            validate = false;
-            $("#contactU").addClass("is-invalid");
-        }
-        else
-        {
-            $("#contactU").removeClass("is-invalid");
-        }
-
-
-        if($.trim($("#addressU").val()).length <= 0)
-        {
-            validate = false;
-            $("#addressU").addClass("is-invalid");
-        }
-        else
-        {
-            $("#addressU").removeClass("is-invalid");
-        }
-
-        if($.trim($("#deptU").val()).length <= 0)
-        {
-            validate = false;
-            $("#deptU").addClass("is-invalid");
-        }
-        else
-        {
-            $("#deptU").removeClass("is-invalid");
-        }
-
-        if($("#internU").val() <= 0)
-        {
-            validate = false;
-            $("#internU").addClass("is-invalid");
-        }
-        else
-        {
-            $("#internU").removeClass("is-invalid");
-        }
 
         if(!validate)
         {
@@ -574,22 +364,20 @@ $(document).ready(function () {
         return validate;
     }
 
-    var UpdatePhysician = function(id){
+    var UpdateAppointment = function(id){
         var decryptLoginInfo = CryptoJS.AES.decrypt(localStorage.loginInfo, '333');
         decryptLoginInfo = decryptLoginInfo.toString(CryptoJS.enc.Utf8);
         decryptLoginInfo = JSON.parse(decryptLoginInfo);
 
         $.ajax({
-            url: api_base_URL+"/api/physicians/update-physician/"+id,
+            url: api_base_URL+"/api/appointments/update-record/"+id,
             method: "PUT",
             data : {
-                id: $('#id').val(),
-                name: $('#nameU').val(),
-                phone_no: $('#contactU').val(),
-                address: $('#addressU').val(),
-                employee_id: $('#statusU').val(),
-                internship: $('#internU').val(),
-                department: $('#deptU').val(),
+                patient_id : $('#patU').val(),
+                physician_id : $('#phyU').val(),
+                employee_id : $('#myID').val(),
+                date_for : $('#dateU').val(),
+                times : $('#timeU').val(),
             },
             headers : {
                 role : decryptLoginInfo.status_id,
@@ -620,77 +408,54 @@ $(document).ready(function () {
                     $('#msgU').html('<small>Something Went Wrong.</small>');
                     $('#msgU').removeAttr('hidden');
                 }
-                LoadAllPhysicians();
-                LoadAllPhysicians(id);
+                LoadAllAppointments();
+                LoadAppointment(id);
             }
         });
     }
 
     $("#updateBTN").click(function () {
         $('#msgU').attr('hidden', true);
-        if(validatePhysicianUpdate())
+        if(validateAppointmentUpdate())
         {
-            UpdatePhysician($('#id').val());
+            UpdateAppointment($('#id').val());
         }
     });
 
-
     // 
-    var loadAllPhysiciansByNameOrESSN = function (param) {
+    var DeleteAppointment = function(id){
         var decryptLoginInfo = CryptoJS.AES.decrypt(localStorage.loginInfo, '333');
-            decryptLoginInfo = decryptLoginInfo.toString(CryptoJS.enc.Utf8);
-            decryptLoginInfo = JSON.parse(decryptLoginInfo);
+        decryptLoginInfo = decryptLoginInfo.toString(CryptoJS.enc.Utf8);
+        decryptLoginInfo = JSON.parse(decryptLoginInfo);
 
-            $.ajax({
-                url: api_base_URL+"/api/physicians/name/"+param+"/essn/"+param,
-                method: "GET",
-                headers : {
-                    role : decryptLoginInfo.role_id,
-                },
-                complete: function (xhr, status) {
-                    if (xhr.status == 200) {
-                        var data = xhr.responseJSON;
-    
-                        var str = '';
-                        var sl = 1;
-                        if(data.length > 0)
-                        {
-                            for (var i = 0; i < data.length; i++) 
-                            {
-                                str += "<tr>"+
-                                            "<th>"+ sl + "</th>"+
-                                            "<td>"+ data[i].pssn  +"</td>"+
-                                            "<td>"+ data[i].name +"</td>"+
-                                            "<td>"+ data[i].department  +"</td>"+
-                                            "<td>"+"<button type='button' data-bs-toggle='modal' data-bs-target='#updateEmployeeModal' data-bs-id='"+data[i].id+"' class='btn btn-sm btn-primary'><i class='fas fa-edit'></i> Edit</button></td>"+
-                                    "</tr>";
-                                sl++;
-                            }
-                        }
-                        else
-                        {
-                            str += "<tr><td colspan='5' align='middle'>NO DATA FOUND</td></tr>";
-                        }
-    
-                        $("#empTable tbody").html(str);
-                    }
-                    else 
-                    {
-                        str += "<tr><td colspan='5' align='middle'>NO DATA FOUND</td></tr>";
-                        $("#empTable tbody").html(str);
-                    }
+        $.ajax({
+            url: api_base_URL+"/api/appointments/delete-record/"+id,
+            method: "PUT",
+            data : {
+                patient_id : $('#patU').val(),
+                physician_id : $('#phyU').val(),
+                employee_id : $('#myID').val(),
+                date_for : $('#dateU').val(),
+                times : $('#timeU').val(),
+            },
+            headers : {
+                role : decryptLoginInfo.status_id,
+            },
+            complete: function (xhr, status) {
+                if (xhr.status == 204) {
+                    $('#updateEmployeeRoleModal').modal('hide');
                 }
-            });
-        }
-    $("#search").on("keyup change",function(){
-        if($.trim($("#search").val()).length > 0)
-        {
-            loadAllPhysiciansByNameOrESSN($("#search").val());
-        }
-        else
-        {
-            LoadAllPhysicians();
-        }
+                else 
+                {
+                    
+                }
+                LoadAllAppointments();
+            }
+        });
+    }
+
+    $("#updateRoleBTN").click(function () {
+        DeleteAppointment($('#idU4').val());
     });
 
 });

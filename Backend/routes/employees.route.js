@@ -7,6 +7,7 @@ var router = express.Router();
 
 router.get("/get-all-employees", employeesController.getAllEmployees);
 router.get("/get-employee/:id", employeesController.getEmployee);
+router.get("/get-employee/login/:id", employeesController.getEmployeeByLogin);
 router.get("/name/:param1/essn/:param2", employeesController.getEmployeeByNameOrEssn)
 router.post("/post-employee", auth.authAdmin, employeesController.postEmployee);
 router.put("/update-employee/:id", auth.authAdmin, employeesController.updateEmployee);

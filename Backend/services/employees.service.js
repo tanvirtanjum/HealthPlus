@@ -33,6 +33,22 @@ exports.getEmployee = (data, callback) => {
     );
 };
 
+exports.getEmployeeByLogin = (data, callback) => {
+    db.query(
+        `SELECT employees.*, logins.username, admin_status.status_name FROM employees `+ 
+        `INNER JOIN logins ON employees.login_id = logins.id `+
+        `INNER JOIN admin_status ON employees.admin_status_id = admin_status.id `+
+        `WHERE employees.login_id = ?; `,
+        [data.id],
+        (error, results, fields) => {
+            if (error) {
+                return callback(error);
+            }
+            return callback(null, results);
+        }
+    );
+};
+
 exports.getEmployeeByNameOrEssn = (data, callback) => {
     db.query(
         `SELECT employees.*, logins.username, admin_status.status_name FROM employees `+ 

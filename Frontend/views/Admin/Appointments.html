@@ -30,9 +30,11 @@
 
   <div class="container-fluid">
 
+    <input type="hidden" id="myID">
+
     <div class="d-grid gap-2 col-6 mx-auto mb-2" align="center">
         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
-            <i class="fas fa-pen"></i>&nbsp; Add New Patient
+            <i class="fas fa-pen"></i>&nbsp; Add New Appointment
         </button>
     </div>
 
@@ -41,111 +43,35 @@
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addEmployeeModalLabel"><i class="fas fa-pen"></i>&nbsp;Add Patient</h5>
+                    <h5 class="modal-title" id="addEmployeeModalLabel"><i class="fas fa-pen"></i>&nbsp;Add Appointment</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="alert mb-2" id="msgP" role="alert" align="center"></div>
-                    <p class="h3">Insurance Info</p><hr>
-                    <div class="form-floating mb-2">
-                        <!-- <textarea class="form-control" placeholder="Write Subject" id="nameP" style="resize: none;"></textarea> -->
-                        <input type="text" class="form-control" placeholder="Write Subject" id="icP">
-                        <label for="icP">Insurance Credential</label>
-                    </div>
 
                     <div class="form-floating mb-2">
-                        <input type="text" class="form-control" placeholder="Write Subject" id="cP">
-                        <label for="cP">Company Name</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <input type="number" class="form-control" placeholder="Write Subject" id="ipP">
-                        <label for="ipP">Insurance Payment</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                      <input type="number" class="form-control" placeholder="Write Subject" id="cpP">
-                      <label for="cpP">CO Payment</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                      <input type="text" class="form-control" placeholder="Write Subject" id="itP">
-                      <label for="itP">Insurance Type</label>
-                    </div>
-                    <br>
-
-
-                    <p class="h3">Personal Info</p><hr>
-                    <div class="form-floating mb-2">
-                        <!-- <textarea class="form-control" placeholder="Write Subject" id="nameP" style="resize: none;"></textarea> -->
-                        <input type="text" class="form-control" placeholder="Write Subject" id="nameP">
-                        <label for="nameP">Name</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <input type="text" class="form-control" placeholder="Write Subject" id="contactP">
-                        <label for="contactP">Contact No.</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <input type="date" class="form-control" placeholder="Write Subject" id="dobP">
-                        <label for="dobP">Birth Date</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <textarea class="form-control" placeholder="Leave a comment here" id="addressP" style="height: 100px"></textarea>
-                        <label for="addressP">Address</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <select class="form-select" id="statusP" aria-label="Floating label select example">
+                        <select class="form-select" id="patP" aria-label="Floating label select example">
                           
                         </select>
-                        <label for="statusP">Physician</label>
-                    </div>
-                    <br>
-
-
-                    <p class="h3">Medical Info</p><hr>
-                    <div class="form-floating mb-2">
-                      <select class="form-select" id="sexP" aria-label="Floating label select example">
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                      </select>
-                      <label for="sexP">Physician</label>
+                        <label for="patP">Patient</label>
                     </div>
 
                     <div class="form-floating mb-2">
-                      <select class="form-select" id="dis1P" aria-label="Floating label select example">
-                        
-                      </select>
-                      <label for="dis1P">Disability</label>
-                  </div>
+                        <select class="form-select" id="phyP" aria-label="Floating label select example">
+                          
+                        </select>
+                        <label for="phyP">Physician</label>
+                    </div>
 
-                  <div class="form-floating mb-2">
-                    <select class="form-select" id="dis2P" aria-label="Floating label select example">
-                      
-                    </select>
-                    <label for="dis2P">Diabetes</label>
-                </div>
+                    <div class="form-floating mb-2">
+                        <input type="date" class="form-control" placeholder="Write Subject" id="dateP">
+                        <label for="dateP">Meet-up Date</label>
+                    </div>
 
-                <div class="form-floating mb-2">
-                  <select class="form-select" id="dis3P" aria-label="Floating label select example">
-                    
-                  </select>
-                  <label for="dis3P">Blood Pressure</label>
-              </div>
-
-              <div class="form-floating mb-2">
-                <select class="form-select" id="dis4P" aria-label="Floating label select example">
-                  
-                </select>
-                <label for="dis4P">Allergies</label>
-            </div>
-
-                    
-                    
+                    <div class="form-floating mb-2">
+                        <input type="time" class="form-control" id="timeP">
+                        <label for="timeP">Meet-up Time</label>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -153,12 +79,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-
-    <div class="input-group mb-2">
-        <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
-        <input type="text" id="search" class="form-control" placeholder="Search By Patient Name or SSN" aria-label="Search By Employee Name" aria-describedby="basic-addon1">
     </div>
 
     <div class="table-responsive">
@@ -184,122 +104,64 @@
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="updateEmployeeModalLabel"><i class="fas fa-pen"></i>&nbsp;Update Patient</h5>
+                <h5 class="modal-title" id="updateEmployeeModalLabel"><i class="fas fa-pen"></i>&nbsp;Update Apposintment</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="alert mb-2" id="msgU" role="alert" align="center"></div>
                 <input type="hidden" id="id">
-                <input type="hidden" id="id_i">
-                <input type="hidden" id="id_m">
-                <p class="h3">Insurance Info</p><hr>
-                    <div class="form-floating mb-2">
-                        <input type="text" class="form-control" placeholder="Write Subject" id="icU">
-                        <label for="icU">Insurance Credential</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <input type="text" class="form-control" placeholder="Write Subject" id="cU">
-                        <label for="cU">Company Name</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <input type="number" class="form-control" placeholder="Write Subject" id="ipU">
-                        <label for="ipU">Insurance Payment</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                      <input type="number" class="form-control" placeholder="Write Subject" id="cpU">
-                      <label for="cpU">CO Payment</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                      <input type="text" class="form-control" placeholder="Write Subject" id="itU">
-                      <label for="itU">Insurance Type</label>
-                    </div>
-                    <br>
-
-
-                    <p class="h3">Personal Info</p><hr>
-                    <div class="form-floating mb-2">
-                      <!-- <textarea class="form-control" placeholder="Write Subject" id="nameP" style="resize: none;"></textarea> -->
-                      <input type="text" class="form-control" placeholder="Write Subject" id="ssnU" readonly>
-                      <label for="ssnU">SSN</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <!-- <textarea class="form-control" placeholder="Write Subject" id="nameP" style="resize: none;"></textarea> -->
-                        <input type="text" class="form-control" placeholder="Write Subject" id="nameU">
-                        <label for="nameU">Name</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <input type="text" class="form-control" placeholder="Write Subject" id="contactU">
-                        <label for="contactU">Contact No.</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <input type="text" class="form-control" placeholder="Write Subject" id="dobU">
-                        <label for="dobU">Birth Date</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <textarea class="form-control" placeholder="Leave a comment here" id="addressU" style="height: 100px"></textarea>
-                        <label for="addressU">Address</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <select class="form-select" id="statusU" aria-label="Floating label select example">
-                          
-                        </select>
-                        <label for="statusU">Physician</label>
-                    </div>
-                    <br>
-
-
-                    <p class="h3">Medical Info</p><hr>
-                    <div class="form-floating mb-2">
-                      <select class="form-select" id="sexU" aria-label="Floating label select example">
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                      </select>
-                      <label for="sexU">Physician</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                      <select class="form-select" id="dis1U" aria-label="Floating label select example">
-                        
-                      </select>
-                      <label for="dis1U">Disability</label>
-                  </div>
-
-                  <div class="form-floating mb-2">
-                    <select class="form-select" id="dis2U" aria-label="Floating label select example">
+                <div class="form-floating mb-2">
+                    <select class="form-select" id="patU" aria-label="Floating label select example">
                       
                     </select>
-                    <label for="dis2U">Diabetes</label>
+                    <label for="patU">Patient</label>
                 </div>
 
                 <div class="form-floating mb-2">
-                  <select class="form-select" id="dis3U" aria-label="Floating label select example">
-                    
-                  </select>
-                  <label for="dis3U">Blood Pressure</label>
-              </div>
+                    <select class="form-select" id="phyU" aria-label="Floating label select example">
+                      
+                    </select>
+                    <label for="phyU">Physician</label>
+                </div>
 
-              <div class="form-floating mb-2">
-                <select class="form-select" id="dis4U" aria-label="Floating label select example">
-                  
-                </select>
-                <label for="dis4U">Allergies</label>
-            </div>
+                <div class="form-floating mb-2">
+                    <input type="text" class="form-control" placeholder="Write Subject" id="dateU">
+                    <label for="dateU">Meet-up Date</label>
+                </div>
+
+                <div class="form-floating mb-2">
+                    <input type="time" class="form-control" id="timeU">
+                    <label for="timeU">Meet-up Time</label>
+                </div>
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
               
                 <button type="button" id="updateBTN" class="btn btn-success">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Update Role Modal -->
+<div class="modal fade" id="updateEmployeeRoleModal" tabindex="-1" aria-labelledby="updateEmployeeRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateEmployeeRoleModalLabel"><i class="fas fa-trash-alt"></i>&nbsp;Delete Appointment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating mb-2">
+                    <div class="alert alert-warning mb-2" role="alert" align="center">Are you sure you want to remove?</div>
+                    <input type="hidden" id="idU4">
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="updateRoleBTN" class="btn btn-success">Confirm</button>
             </div>
         </div>
     </div>
