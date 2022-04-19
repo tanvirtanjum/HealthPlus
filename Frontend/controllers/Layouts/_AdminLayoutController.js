@@ -6,6 +6,7 @@ $(document).ready(function () {
     $('#empTab').attr("href", base_URL+"/views/Admin/Employees.html");
     $('#phyTab').attr("href", base_URL+"/views/Admin/Physicians.html");
     $('#patTab').attr("href", base_URL+"/views/Admin/Patients.html");
+    $('#appTab').attr("href", base_URL+"/views/Admin/Appointments.html");
 
     function activeSection()
     {
@@ -15,6 +16,7 @@ $(document).ready(function () {
             $('#empTab').removeClass("active");
             $('#phyTab').removeClass("active");
             $('#patTab').removeClass("active");
+            $('#appTab').removeClass("active");
         }
 
         if(window.location.href == base_URL+"/views/Admin/Employees.html")
@@ -23,6 +25,7 @@ $(document).ready(function () {
             $('#empTab').addClass("active");
             $('#phyTab').removeClass("active");
             $('#patTab').removeClass("active");
+            $('#appTab').removeClass("active");
         }
 
         if(window.location.href == base_URL+"/views/Admin/Physicians.html")
@@ -31,6 +34,7 @@ $(document).ready(function () {
             $('#empTab').removeClass("active");
             $('#phyTab').addClass("active");
             $('#patTab').removeClass("active");
+            $('#appTab').removeClass("active");
         }
 
         if(window.location.href == base_URL+"/views/Admin/Patients.html")
@@ -39,6 +43,16 @@ $(document).ready(function () {
             $('#empTab').removeClass("active");
             $('#phyTab').removeClass("active");
             $('#patTab').addClass("active");
+            $('#appTab').removeClass("active");
+        }
+
+        if(window.location.href == base_URL+"/views/Admin/Appointments.html")
+        {
+            $('#dashTab').removeClass("active");
+            $('#empTab').removeClass("active");
+            $('#phyTab').removeClass("active");
+            $('#patTab').removeClass("active");
+            $('#appTab').addClass("active");
         }
 
     }
