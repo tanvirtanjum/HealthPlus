@@ -1,11 +1,11 @@
 const db = require("../config/db.config");
 
-exports.getAllPhysicians = (data, callback) => {
+exports.getAllPatients = (data, callback) => {
     db.query(
-        `SELECT physicians.*, logins.username, login_status.status_name FROM physicians `+ 
-        `INNER JOIN logins ON physicians.login_id = logins.id `+
-        `INNER JOIN login_status ON logins.status_id = login_status.id `+
-        `ORDER BY physicians.department  ASC; `,
+        `SELECT patients.*, physicians.name as phy_name, insurance.insrurance_id as i_i, insurance.company_name, insurance.insurance_pay, insurance.copay, insurance.p_s FROM patients `+ 
+        `INNER JOIN physicians ON patients.physician_id = physicians.id `+
+        `INNER JOIN insurance ON patients.insurance_id = insurance.id `+
+        `ORDER BY patients.name  ASC; `,
         [],
         (error, results, fields) => {
             if (error) {
@@ -34,12 +34,12 @@ exports.getCount = (data, callback) => {
     );
 };
 
-exports.getPhysician = (data, callback) => {
+exports.getPatient = (data, callback) => {
     db.query(
-        `SELECT physicians.*, logins.username, login_status.status_name FROM physicians `+ 
-        `INNER JOIN logins ON physicians.login_id = logins.id `+
-        `INNER JOIN login_status ON logins.status_id = login_status.id `+
-        `WHERE physicians.id = ?; `,
+        `SELECT patients.*, physicians.name as phy_name, insurance.insrurance_id as i_i, insurance.company_name, insurance.insurance_pay, insurance.copay, insurance.p_s FROM patients `+ 
+        `INNER JOIN physicians ON patients.physician_id = physicians.id `+
+        `INNER JOIN insurance ON patients.insurance_id = insurance.id `+
+        `WHERE patients.id = ?; `,
         [data.id],
         (error, results, fields) => {
             if (error) {
@@ -50,29 +50,12 @@ exports.getPhysician = (data, callback) => {
     );
 };
 
-
-exports.getEmployeeByLogin = (data, callback) => {
+exports.getPatientByNameOrSsn = (data, callback) => {
     db.query(
-        `SELECT employees.*, logins.username, admin_status.status_name FROM employees `+ 
-        `INNER JOIN logins ON employees.login_id = logins.id `+
-        `INNER JOIN admin_status ON employees.admin_status_id = admin_status.id `+
-        `WHERE employees.login_id = ?; `,
-        [data.login_id],
-        (error, results, fields) => {
-            if (error) {
-                return callback(error);
-            }
-            return callback(null, results);
-        }
-    );
-};
-
-exports.getPhysiciansByNameOrEssn = (data, callback) => {
-    db.query(
-        `SELECT physicians.*, logins.username, login_status.status_name FROM physicians `+ 
-        `INNER JOIN logins ON physicians.login_id = logins.id `+
-        `INNER JOIN login_status ON logins.status_id = login_status.id `+
-        `WHERE physicians.name LIKE ? OR physicians.pssn LIKE ?; `,
+        `SELECT patients.*, physicians.name as phy_name, insurance.insrurance_id as i_i, insurance.company_name, insurance.insurance_pay, insurance.copay, insurance.p_s FROM patients `+ 
+        `INNER JOIN physicians ON patients.physician_id = physicians.id `+
+        `INNER JOIN insurance ON patients.insurance_id = insurance.id `+
+        `WHERE patients.name LIKE ? OR patients.ssn LIKE ?; `,
         [data.param1, data.param2],
         (error, results, fields) => {
             if (error) {
@@ -83,10 +66,10 @@ exports.getPhysiciansByNameOrEssn = (data, callback) => {
     );
 };
 
-exports.postPhysician = (data, callback) => {
+exports.postPatient = (data, callback) => {
     db.query(
-        `INSERT INTO physicians(pssn, name, phone_no, address, internship, department, login_id, employee_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-        [data.pssn, data.name, data.phone_no, data.address, data.internship, data.department, data.login_id, data.employee_id],
+        `INSERT INTO patients(ssn, name, phone_no, address, dob, physician_id, insurance_id) VALUES (?, ?, ?, ?, ?, ?, ?);`,
+        [data.ssn, data.name, data.phone_no, data.address, data.dob, data.physician_id, data.insurance_id],
         (error, results, fields) => {
             if (error) {
                 return callback(error);
@@ -98,10 +81,10 @@ exports.postPhysician = (data, callback) => {
     );
 };
 
-exports.updatePhysician = (data, callback) => {
+exports.updatePatient = (data, callback) => {
     db.query(
-        `UPDATE physicians SET name = ?, phone_no = ?, address = ?, internship = ?, department = ?, employee_id = ? WHERE id = ?;`,
-        [data.name, data.phone_no, data.address, data.internship, data.department, data.employee_id, data.id],
+        `UPDATE patients SET name = ?, phone_no = ?, address = ?, dob = ?, physician_id = ? WHERE id = ?;`,
+        [data.name, data.phone_no, data.address, data.dob, data.physician_id, data.id],
         (error, results, fields) => {
             if (error) {
                 return callback(error);

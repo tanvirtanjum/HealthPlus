@@ -16,24 +16,6 @@ exports.getAllPhysicians = (data, callback) => {
     );
 };
 
-exports.getCount = (data, callback) => {
-    db.query(
-        `SELECT
-            SUM(IF(employment_status_id = 1, 1, 0)) AS active_emp,
-            SUM(IF(employment_status_id = 2, 1, 0)) AS left_emp,
-            SUM(IF(employment_status_id = 3, 1, 0)) AS on_break_emp,
-            SUM(IF(employment_status_id = 4, 1, 0)) AS retired_emp
-        FROM employees `,
-        [],
-        (error, results, fields) => {
-            if (error) {
-                return callback(error);
-            }
-            return callback(null, results);
-        }
-    );
-};
-
 exports.getPhysician = (data, callback) => {
     db.query(
         `SELECT physicians.*, logins.username, login_status.status_name FROM physicians `+ 
@@ -41,23 +23,6 @@ exports.getPhysician = (data, callback) => {
         `INNER JOIN login_status ON logins.status_id = login_status.id `+
         `WHERE physicians.id = ?; `,
         [data.id],
-        (error, results, fields) => {
-            if (error) {
-                return callback(error);
-            }
-            return callback(null, results);
-        }
-    );
-};
-
-
-exports.getEmployeeByLogin = (data, callback) => {
-    db.query(
-        `SELECT employees.*, logins.username, admin_status.status_name FROM employees `+ 
-        `INNER JOIN logins ON employees.login_id = logins.id `+
-        `INNER JOIN admin_status ON employees.admin_status_id = admin_status.id `+
-        `WHERE employees.login_id = ?; `,
-        [data.login_id],
         (error, results, fields) => {
             if (error) {
                 return callback(error);

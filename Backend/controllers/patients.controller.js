@@ -1,15 +1,15 @@
 // Importing System Library Modules
 const validator = require('validator');
 
-const physiciansService = require("../services/physicians.service");
+const patientsService = require("../services/patients.service");
 
 
-exports.getAllPhysicians = (req, res, next) => {
+exports.getAllPatients = (req, res, next) => {
     var validated = true;
     const data = {};
 
     if(validated){
-        physiciansService.getAllPhysicians(data, (error, results) => {
+        patientsService.getAllPatients(data, (error, results) => {
             if (error) {
                 console.log(error);
                 return res.status(400).send({ success: false, data: "Bad Request. {{--> "+error+" <--}}" });
@@ -32,14 +32,14 @@ exports.getAllPhysicians = (req, res, next) => {
 };
 
 
-exports.getPhysician = (req, res, next) => {
+exports.getPatient = (req, res, next) => {
     var validated = true;
     const data = {
         'id' : req.params.id,
     };
 
     if(validated){
-        physiciansService.getPhysician(data, (error, results) => {
+        patientsService.getPatient(data, (error, results) => {
             if (error) {
                 console.log(error);
                 return res.status(400).send({ success: false, data: "Bad Request. {{--> "+error+" <--}}" });
@@ -62,36 +62,7 @@ exports.getPhysician = (req, res, next) => {
 };
 
 
-exports.getEmployeeByLogin = (req, res, next) => {
-    var validated = true;
-    const data = {
-        'login_id' : req.params.id,
-    };
-
-    if(validated){
-        employeesService.getEmployeeByLogin(data, (error, results) => {
-            if (error) {
-                console.log(error);
-                return res.status(400).send({ success: false, data: "Bad Request. {{--> "+error+" <--}}" });
-            }
-            else {
-                if (results.length > 0) {
-                    return res.status(200).send(results[0]);
-                }
-    
-                else {
-                    return res.status(204).send({ success: false, data: "No Data Found." });
-                }
-            }
-        });
-    }
-    else{
-        return res.status(401).send({ success: false, data: "Unauthorized Request." })
-    }
-
-};
-
-exports.getPhysiciansByNameOrEssn = (req, res, next) => {
+exports.getPatientByNameOrSsn = (req, res, next) => {
     var validated = true;
     const data = {
         'param1' : "%"+req.params.param1+"%",
@@ -99,7 +70,7 @@ exports.getPhysiciansByNameOrEssn = (req, res, next) => {
     };
 
     if(validated){
-        physiciansService.getPhysiciansByNameOrEssn(data, (error, results) => {
+        patientsService.getPatientByNameOrSsn(data, (error, results) => {
             if (error) {
                 console.log(error);
                 return res.status(400).send({ success: false, data: "Bad Request. {{--> "+error+" <--}}" });
@@ -121,20 +92,19 @@ exports.getPhysiciansByNameOrEssn = (req, res, next) => {
 
 };
 
-exports.postPhysician = (req, res, next) => {
+exports.postPatient = (req, res, next) => {
     var validated = true;
     const data = {
-        'login_id' : req.body.login_id,
+        'insurance_id' : req.body.insurance_id,
         'name' : req.body.name,
-        'pssn' : req.body.pssn,
+        'ssn' : req.body.ssn,
+        'dob' : req.body.dob,
         'phone_no' : req.body.phone_no,
         'address' : req.body.address,
-        'department' : req.body.department,
-        'internship' : req.body.internship,
-        'employee_id' : req.body.employee_id,
+        'physician_id' : req.body.physician_id,
     };
 
-    if(data.login_id <= 0) {
+    if(data.insurance_id <= 0) {
         validated = false;
     }
 
@@ -142,7 +112,7 @@ exports.postPhysician = (req, res, next) => {
         validated = false;
     }
 
-    if(validator.isEmpty(data.pssn , {ignore_whitespace: true})) {
+    if(validator.isEmpty(data.ssn , {ignore_whitespace: true})) {
         validated = false;
     }
 
@@ -155,21 +125,14 @@ exports.postPhysician = (req, res, next) => {
         validated = false;
     }
 
-    if(validator.isEmpty(data.department, {ignore_whitespace: true})) {
+    if(validator.isEmpty(data.physician_id, {ignore_whitespace: true})) {
         validated = false;
     }
 
-    if(validator.isEmpty(data.internship, {ignore_whitespace: true})) {
-        validated = false;
-    }
-
-    if(validator.isEmpty(data.employee_id, {ignore_whitespace: true})) {
-        validated = false;
-    }
 
     if(validated){
         console.log(data);
-        physiciansService.postPhysician(data, (error, results) => {
+        patientsService.postPatient(data, (error, results) => {
             if (error) {
                 console.log(error);
                 return res.status(400).send({ success: false, data: "Bad Request. {{--> "+error+" <--}}" });
@@ -186,16 +149,15 @@ exports.postPhysician = (req, res, next) => {
 
 };
 
-exports.updatePhysician = (req, res, next) => {
+exports.updatePatient = (req, res, next) => {
     var validated = true;
     const data = {
         'id' : req.params.id,
         'name' : req.body.name,
+        'dob' : req.body.dob,
         'phone_no' : req.body.phone_no,
         'address' : req.body.address,
-        'department' : req.body.department,
-        'internship' : req.body.internship,
-        'employee_id' : req.body.employee_id,
+        'physician_id' : req.body.physician_id,
     };
 
     if(data.id <= 0) {
@@ -206,6 +168,7 @@ exports.updatePhysician = (req, res, next) => {
         validated = false;
     }
 
+
     if(validator.isEmpty(data.phone_no, {ignore_whitespace: true})) {
         validated = false;
     }
@@ -215,21 +178,13 @@ exports.updatePhysician = (req, res, next) => {
         validated = false;
     }
 
-    if(validator.isEmpty(data.department, {ignore_whitespace: true})) {
-        validated = false;
-    }
-
-    if(validator.isEmpty(data.internship, {ignore_whitespace: true})) {
-        validated = false;
-    }
-
-    if(validator.isEmpty(data.employee_id, {ignore_whitespace: true})) {
+    if(validator.isEmpty(data.physician_id, {ignore_whitespace: true})) {
         validated = false;
     }
 
 
     if(validated){
-        physiciansService.updatePhysician(data, (error, results) => {
+        patientsService.updatePatient(data, (error, results) => {
             if (error) {
                 console.log(error);
                 return res.status(400).send({ success: false, data: "Bad Request. {{--> "+error+" <--}}" });
