@@ -13,6 +13,7 @@ const physiciansRoutes = require("./routes/physicians.route");
 const insuranceRoutes = require("./routes/insurance.route");
 const patientsRoutes = require("./routes/patients.route");
 const medical_recordsRoutes = require("./routes/medical_records.route");
+const appointmentsRoutes = require("./routes/appointments.route");
 
 // <---> 
 dotenv.config();
@@ -33,6 +34,7 @@ app.use("/api/physicians", physiciansRoutes);
 app.use("/api/insurance", insuranceRoutes);
 app.use("/api/patients", patientsRoutes);
 app.use("/api/medical_records", medical_recordsRoutes);
+app.use("/api/appointments", appointmentsRoutes);
 
 // <-- -->
 app.listen(process.env.SERVER_PORT_NO, () => {
